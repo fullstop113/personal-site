@@ -4,10 +4,14 @@ import { pathToFileURL } from 'node:url';
 
 /**
  * 内容集合：直接读取 Obsidian vault 里的白名单文件夹。
- * 改路径只需改这里。Astro 的 glob loader 要求 base 是 file:// URL。
+ *
+ * 定位策略（本地 vs 线上）：
+ * - 本地开发：不设环境变量，默认读 D 盘 Obsidian 绝对路径（零配置）
+ * - 线上构建：CI 里把 blog-content 仓库 clone 到某目录（如 ./content/），
+ *   并设置环境变量 VAULT_PUBLIC 指向它，例如 VAULT_PUBLIC=./content/
  */
 const VAULT_PUBLIC = pathToFileURL(
-  'D:/obsidianDataBase/句号资料库/05public/',
+  process.env.VAULT_PUBLIC ?? 'D:/obsidianDataBase/句号资料库/05public/',
 ).href;
 
 const blog = defineCollection({
