@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('blog', ({ data }) => !data.draft);
+const tagSet = new Map<string, number>();
+for (const p of all) {
+  for (const t of p.data.tags ?? []) {
+    tagSet.set(t, (tagSet.get(t) ?? 0) + 1);
+  }
+}
+const tags = [...tagSet.entries()].sort((a, b) => b[1] - a[1]);
+---
+<BaseLayout title="标签">
+  <h1>标签</h1>
+  {
+    tags.length === 0 ? (
+      <p style="color: var(--muted)">还没有标签。在文章 frontmatter 里写 <code>tags: [Java, Web3]</code>。</p>
+    ) : (
+      <p>
+        {tags.map(([t, n]) => (
+          <a class="tag" href={`/tags/${t}/`} style="margin-bottom: 0.5rem">
+            {t} · {n}
+          </a>
+        ))}
+      </p>
+    )
+  }
+</BaseLayout>

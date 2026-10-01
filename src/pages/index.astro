@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('blog', ({ data }) => !data.draft);
+const posts = all
+  .sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0))
+  .slice(0, 5);
+---
+<BaseLayout>
+  <section class="hero">
+    <h1>你好，我是句号。</h1>
+    <p class="lead">
+      后端工程师，折腾 Java / Go / Web3 / LLM 应用。这里放我的项目、读书笔记和踩坑记录。
+    </p>
+  </section>
+
+  <h2>最近文章</h2>
+  {
+    posts.length === 0 ? (
+      <p style="color: var(--muted)">
+        还没有文章。打开 Obsidian，在 <code>05public/</code> 里新建一篇 <code>.md</code> 试试。
+      </p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((p) => (
+          <li>
+            <div class="title">
+              <a href={`/blog/${p.id}/`}>{p.data.title ?? p.id}</a>
+            </div>
+            {p.data.description && <div class="desc">{p.data.description}</div>}
+            <div class="meta">
+              {p.data.pubDate
+                ? new Date(p.data.pubDate).toISOString().slice(0, 10)
+                : '无日期'}
+            </div>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <p style="margin-top: 2rem">
+    <a href="/blog/">查看全部 →</a>
+  </p>
+</BaseLayout>

@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = '句号的个人博客与作品集' } = Astro.props;
+const siteTitle = title ? `${title} · 句号` : '句号';
+const nav = [
+  { href: '/', label: '首页' },
+  { href: '/blog/', label: '博客' },
+  { href: '/projects/', label: '项目' },
+  { href: '/tags/', label: '标签' },
+];
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="inner">
+        <a class="brand" href="/">句号.dev</a>
+        <nav class="nav">
+          {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      © {new Date().getFullYear()} 句号 · Built with Astro
+    </footer>
+  </body>
+</html>

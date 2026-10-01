@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+  const tagSet = new Set<string>();
+  for (const p of all) for (const t of p.data.tags ?? []) tagSet.add(t);
+  return [...tagSet].map((tag) => ({
+    params: { tag },
+    props: {
+      posts: all
+        .filter((p) => (p.data.tags ?? []).includes(tag))
+        .sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0)),
+      tag,
+    },
+  }));
+}
+
+const { posts, tag } = Astro.props;
+---
+<BaseLayout title={`标签: ${tag}`}>
+  <h1>#{tag}</h1>
+  <ul class="post-list">
+    {posts.map((p) => (
+      <li>
+        <div class="title">
+          <a href={`/blog/${p.id}/`}>{p.data.title ?? p.id}</a>
+        </div>
+        {p.data.description && <div class="desc">{p.data.description}</div>}
+        <div class="meta">
+          {p.data.pubDate ? new Date(p.data.pubDate).toISOString().slice(0, 10) : ''}
+        </div>
+      </li>
+    ))}
+  </ul>
+  <p><a href="/tags/">← 全部标签</a></p>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('blog', ({ data }) => !data.draft);
+all.sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0));
+---
+<BaseLayout title="博客">
+  <h1>博客</h1>
+  <p style="color: var(--muted)">共 {all.length} 篇。</p>
+  {
+    all.length === 0 ? (
+      <p>还没有文章。在 Obsidian 的 <code>05public/</code> 目录下写一篇就会自动出现。</p>
+    ) : (
+      <ul class="post-list">
+        {all.map((p) => (
+          <li>
+            <div class="title">
+              <a href={`/blog/${p.id}/`}>{p.data.title ?? p.id}</a>
+            </div>
+            {p.data.description && <div class="desc">{p.data.description}</div>}
+            <div class="meta">
+              {p.data.pubDate
+                ? new Date(p.data.pubDate).toISOString().slice(0, 10)
+                : '无日期'}
+              {p.data.tags && p.data.tags.length > 0 && (
+                <span>
+                  　·　
+                  {p.data.tags.map((t) => (
+                    <a class="tag" href={`/tags/${t}/`}>{t}</a>
+                  ))}
+                </span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>
