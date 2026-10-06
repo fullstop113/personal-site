@@ -20,7 +20,6 @@ const blog = defineCollection({
     base: VAULT_PUBLIC,
   }),
   schema: z.object({
-    title: z.string().nullish(),
     description: z.string().nullish(),
     pubDate: z.coerce.date().nullish(),
     updated: z.coerce.date().nullish(),

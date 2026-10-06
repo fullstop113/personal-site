@@ -16,7 +16,7 @@ all.sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf()
         {all.map((p) => (
           <li>
             <div class="title">
-              <a href={`/blog/${p.id}/`}>{p.data.title ?? p.id}</a>
+              <a href={`/blog/${p.id}/`}>{p.id}</a>
             </div>
             {p.data.description && <div class="desc">{p.data.description}</div>}
             <div class="meta">

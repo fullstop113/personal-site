@@ -26,7 +26,7 @@ const posts = all
         {posts.map((p) => (
           <li>
             <div class="title">
-              <a href={`/blog/${p.id}/`}>{p.data.title ?? p.id}</a>
+              <a href={`/blog/${p.id}/`}>{p.id}</a>
             </div>
             {p.data.description && <div class="desc">{p.data.description}</div>}
             <div class="meta">
