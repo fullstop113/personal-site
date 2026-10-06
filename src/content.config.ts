@@ -20,13 +20,13 @@ const blog = defineCollection({
     base: VAULT_PUBLIC,
   }),
   schema: z.object({
-    title: z.string().optional(),
-    description: z.string().optional(),
-    pubDate: z.coerce.date().optional(),
-    updated: z.coerce.date().optional(),
-    tags: z.array(z.string()).optional().default([]),
-    draft: z.boolean().optional().default(false),
-    excerpt: z.string().optional(),
+    title: z.string().nullish(),
+    description: z.string().nullish(),
+    pubDate: z.coerce.date().nullish(),
+    updated: z.coerce.date().nullish(),
+    tags: z.array(z.string()).nullish().default([]),
+    draft: z.boolean().nullish().default(false),
+    excerpt: z.string().nullish(),
   }),
 });
 
