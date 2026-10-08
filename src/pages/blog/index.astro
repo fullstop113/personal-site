@@ -2,7 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const all = await getCollection('blog', ({ data }) => !data.draft);
+// 集合里只有文章(草稿在 vault 的 05draft/,不在内容目录里),不用再过滤
+const all = await getCollection('blog');
 all.sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0));
 ---
 <BaseLayout title="博客">
@@ -16,7 +17,7 @@ all.sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf()
         {all.map((p) => (
           <li>
             <div class="title">
-              <a href={`/blog/${p.id}/`}>{p.id}</a>
+              <a href={`/blog/${p.id}/`}>{p.data.title ?? p.id}</a>
             </div>
             {p.data.description && <div class="desc">{p.data.description}</div>}
             <div class="meta">

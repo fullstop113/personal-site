@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('blog', ({ data }) => !data.draft);
+  const entries = await getCollection('blog');
   return entries.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const title = entry.id;
+const title = entry.data.title ?? entry.id;
 ---
 <BaseLayout title={title} description={entry.data.description}>
   <article class="prose">

@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const all = await getCollection('blog', ({ data }) => !data.draft);
+  const all = await getCollection('blog');
   const tagSet = new Set<string>();
   for (const p of all) for (const t of p.data.tags ?? []) tagSet.add(t);
   return [...tagSet].map((tag) => ({
